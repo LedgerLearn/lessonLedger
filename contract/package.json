@@ -1,0 +1,19 @@
+{
+  "name": "academic-accountability-contracts",
+  "version": "0.1.0",
+  "description": "Stellar smart contracts for Academic Accountability Platform",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "soroban contract build",
+    "test": "soroban contract test",
+    "deploy:testnet": "soroban contract deploy --network testnet",
+    "deploy:mainnet": "soroban contract deploy --network mainnet"
+  },
+  "dependencies": {
+    "stellar-sdk": "^11.0.0"
+  },
+  "devDependencies": {
+    "soroban-cli": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
