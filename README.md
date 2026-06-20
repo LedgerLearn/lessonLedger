@@ -2,7 +2,7 @@
 
 A web application that helps learners organize, track, and stay accountable to their academic and career learning goals using structured roadmaps, task tracking, progress analytics, and blockchain-verified achievements.
 
-## 🎯 Project Overview
+##  Project Overview
 
 This platform is **NOT** a teaching platform. Instead, it focuses on:
 
@@ -19,7 +19,7 @@ The app combines the best of:
 - **Duolingo** (streaks and gamification)
 - **GitHub** (contribution tracking)
 
-## 🚀 Core Features
+##  Core Features
 
 ### 1. **Learning Roadmaps**
 - Pre-built learning paths for various domains (Frontend, Backend, Data Science, etc.)
@@ -56,7 +56,7 @@ The app combines the best of:
 - Google OAuth integration
 - Optional wallet linking
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 decentralized-academic-accountability/
@@ -67,7 +67,7 @@ decentralized-academic-accountability/
 └── .gitignore
 ```
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React** / **Next.js** - UI framework
@@ -89,7 +89,7 @@ decentralized-academic-accountability/
 ### Authentication
 - **Clerk** or **NextAuth.js** - Auth provider
 
-## 📋 MVP Scope (Phase 1)
+##  MVP Scope (Phase 1)
 
 Build FIRST (without advanced blockchain complexity):
 - ✅ User authentication (email/password, Google OAuth)
@@ -98,14 +98,14 @@ Build FIRST (without advanced blockchain complexity):
 - ✅ Progress dashboard
 - ✅ Streak tracking
 
-## 🔮 Phase 2
+##  Phase 2
 
 Add:
 - Stellar wallet integration
 - Achievement NFTs
 - Gas sponsorship (gasless transactions)
 
-## 🌟 Phase 3
+##  Phase 3
 
 Add:
 - Dynamic NFTs
@@ -113,7 +113,7 @@ Add:
 - Public learner profiles
 - Social/community features
 
-## 🎨 Design Direction
+##  Design Direction
 
 UI should feel:
 - Clean and minimal
@@ -122,7 +122,7 @@ UI should feel:
 
 Inspiration: Notion, Linear, GitHub, Duolingo, Roadmap.sh
 
-## 🌐 Web3 / Stellar Integration
+##  Web3 / Stellar Integration
 
 The blockchain aspect is **invisible and stress-free** for users:
 - ✅ No crypto knowledge required
@@ -131,7 +131,7 @@ The blockchain aspect is **invisible and stress-free** for users:
 - ✅ One-click NFT claiming
 - ✅ Feels like a normal Web2 application
 
-## 🤝 Open Source Features
+##  Open Source Features
 
 Community members can contribute:
 - Learning roadmaps
@@ -145,7 +145,7 @@ Contributors earn:
 - Contributor NFTs
 - Platform recognition
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -203,28 +203,28 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
-## 📚 Documentation
+##  Documentation
 
 - [Frontend Documentation](./frontend/README.md)
 - [Backend Documentation](./backend/README.md)
 - [Smart Contracts Documentation](./contract/README.md)
 
-## 🤝 Contributing
+##  Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## 💡 Vision Statement
+##  Vision Statement
 
 A decentralized academic accountability platform that transforms learning progress, consistency, and contributions into verifiable on-chain achievements powered by Stellar.
 
-## 📞 Support
+##  Support
 
 For questions or issues, please open an issue on GitHub or contact the maintainers.
 
 ---
 
-**Built with ❤️ for learners and educators worldwide**
+
