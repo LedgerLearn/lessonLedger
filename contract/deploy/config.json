@@ -1,0 +1,31 @@
+{
+  "networks": {
+    "sepolia": {
+      "chainId": 11155111,
+      "rpcUrl": "https://sepolia.infura.io/v3/YOUR_INFURA_KEY",
+      "explorerUrl": "https://sepolia.etherscan.io",
+      "explorerApiUrl": "https://api-sepolia.etherscan.io/api",
+      "confirmations": 5,
+      "gasPrice": "auto"
+    },
+    "mumbai": {
+      "chainId": 80001,
+      "rpcUrl": "https://rpc-mumbai.maticvigil.com",
+      "explorerUrl": "https://mumbai.polygonscan.com",
+      "explorerApiUrl": "https://api-testnet.polygonscan.com/api",
+      "confirmations": 10,
+      "gasPrice": "auto"
+    }
+  },
+  "deployment": {
+    "adminAddress": "0x...",
+    "multiSigWallet": "0x...",
+    "verificationParams": {
+      "compiler": "0.8.19",
+      "optimization": {
+        "enabled": true,
+        "runs": 200
+      }
+    }
+  }
+}
