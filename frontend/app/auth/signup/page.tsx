@@ -36,21 +36,21 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-indigo-950 flex items-center justify-center px-4 py-8 transition-colors">
       <div className="w-full max-w-md">
         <div className="card">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">Create Account</h1>
-          <p className="text-sm sm:text-base text-center text-gray-600 mb-6 sm:mb-8">Start your learning journey today</p>
+          <p className="text-sm sm:text-base text-center text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">Start your learning journey today</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg text-sm">
                 {error}
               </div>
             )}
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Full Name
               </label>
               <div className="relative">
@@ -59,7 +59,7 @@ export default function SignupPage() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+                  className="w-full px-4 pl-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
                   placeholder="John Doe"
                   required
                 />
@@ -67,7 +67,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -76,7 +76,7 @@ export default function SignupPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+                  className="w-full px-4 pl-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
                   placeholder="you@example.com"
                   required
                 />
@@ -84,7 +84,7 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -93,7 +93,7 @@ export default function SignupPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+                  className="w-full px-4 pl-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
                   placeholder="••••••••"
                   required
                 />
@@ -109,8 +109,8 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-sm sm:text-base text-gray-600">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+            <p className="text-center text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Already have an account?{' '}
               <Link href="/auth/login" className="text-primary font-semibold hover:underline">
                 Sign in

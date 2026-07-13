@@ -47,23 +47,23 @@ export default function RoadmapsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
         <Navbar />
         <div className="flex items-center justify-center h-96">
-          <p className="text-gray-600">Loading roadmaps...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading roadmaps...</p>
         </div>
       </div>
     )
   }
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
       <Navbar />
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Learning Roadmaps</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Choose a path and start your learning journey</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Learning Roadmaps</h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 sm:mt-2">Choose a path and start your learning journey</p>
         </div>
       </div>
 
@@ -71,8 +71,8 @@ export default function RoadmapsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {roadmaps.length === 0 ? (
           <div className="text-center py-12">
-            <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-sm sm:text-base text-gray-600">No roadmaps available yet.</p>
+            <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">No roadmaps available yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -83,16 +83,16 @@ export default function RoadmapsPage() {
                     <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-white opacity-50" />
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{roadmap.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{roadmap.description}</p>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">{roadmap.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{roadmap.description}</p>
 
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">{roadmap.sections?.length || 0} sections</span>
+                      <span className="text-gray-600 dark:text-gray-400">{roadmap.sections?.length || 0} sections</span>
                       <span className="font-semibold text-primary">0%</span>
                     </div>
 
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-primary h-2 rounded-full transition-all"
                         style={{ width: '0%' }}
