@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { Award, Trophy, Zap } from 'lucide-react';
+import { SkeletonAchievements } from './skeletons';
 
 interface Achievement {
   id: string;
@@ -43,7 +44,7 @@ export default function AchievementsGrid() {
   };
 
   if (loading) {
-    return <div className="text-center py-8 text-sm">Loading achievements...</div>;
+    return <SkeletonAchievements />;
   }
 
   if (achievements.length === 0) {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { SkeletonTaskList } from './skeletons';
 
 interface Task {
   id: string;
@@ -40,7 +41,7 @@ export default function TaskList() {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
-  if (loading) return <div className="text-center py-8">Loading tasks...</div>;
+  if (loading) return <SkeletonTaskList />;
 
   const upcomingTasks = tasks.filter((t) => !t.completed).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 

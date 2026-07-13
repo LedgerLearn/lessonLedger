@@ -9,6 +9,7 @@ import { getStoredAuth, setStoredAuth } from '@/lib/auth'
 import { api } from '@/lib/api'
 import StreakCard from '@/components/StreakCard'
 import TaskList from '@/components/TaskList'
+import { SkeletonDashboard } from '@/components/skeletons'
 
 const mockData = [
   { day: 'Mon', hours: 2 },
@@ -56,7 +57,7 @@ export default function DashboardPage() {
   }
 
   if (!user) return null
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  if (loading) return <SkeletonDashboard />
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
