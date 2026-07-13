@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { SkeletonStreak } from './skeletons';
 
 interface Streak {
   id: string;
@@ -26,7 +27,7 @@ export default function StreakCard() {
     fetchStreak();
   }, []);
 
-  if (loading) return <div className="p-4 bg-gray-100 rounded animate-pulse h-24 sm:h-32" />;
+  if (loading) return <SkeletonStreak />;
 
   return (
     <div className="bg-gradient-to-br from-orange-400 to-red-500 text-white p-4 sm:p-6 rounded-lg shadow-lg">
