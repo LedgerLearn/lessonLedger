@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from '@/components/Providers'
+import { DarkModeProvider } from '@/components/DarkModeProvider'
 
 export const metadata: Metadata = {
   title: 'Academic Accountability Platform',
@@ -19,11 +20,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
-        <Providers>
-          {children}
-        </Providers>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+        <DarkModeProvider>
+          <Providers>
+            {children}
+          </Providers>
+        </DarkModeProvider>
       </body>
     </html>
   )

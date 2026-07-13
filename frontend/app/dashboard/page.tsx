@@ -59,12 +59,12 @@ export default function DashboardPage() {
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Welcome back! Here's your learning progress.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 sm:mt-2">Welcome back! Here's your learning progress.</p>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export default function DashboardPage() {
         {/* Welcome */}
         <div className="mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl font-bold">Welcome back, {user.name}!</h2>
-          <p className="text-sm sm:text-base text-gray-600">Here's your learning progress.</p>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Here's your learning progress.</p>
         </div>
 
         {/* Streak Card */}
@@ -89,10 +89,10 @@ export default function DashboardPage() {
               <div className="min-w-[300px]">
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={mockData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" className="dark:stroke-gray-700" />
+                    <XAxis dataKey="day" tick={{ fontSize: 12 }} className="dark:fill-gray-400" />
+                    <YAxis tick={{ fontSize: 12 }} className="dark:fill-gray-400" />
+                    <Tooltip contentStyle={{ backgroundColor: 'var(--tooltip-bg)', border: '1px solid var(--tooltip-border)' }} />
                     <Bar dataKey="hours" fill="#6366f1" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -106,10 +106,10 @@ export default function DashboardPage() {
               <div className="min-w-[300px]">
                 <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={mockData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" className="dark:stroke-gray-700" />
+                    <XAxis dataKey="day" tick={{ fontSize: 12 }} className="dark:fill-gray-400" />
+                    <YAxis tick={{ fontSize: 12 }} className="dark:fill-gray-400" />
+                    <Tooltip contentStyle={{ backgroundColor: 'var(--tooltip-bg)', border: '1px solid var(--tooltip-border)' }} />
                     <Line type="monotone" dataKey="hours" stroke="#8b5cf6" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -127,15 +127,15 @@ export default function DashboardPage() {
           <div className="card">
             <h3 className="text-base sm:text-lg font-semibold mb-4">Recent Achievements</h3>
             {achievements.length === 0 ? (
-              <p className="text-gray-500 text-center py-8 text-sm">No achievements yet. Keep learning!</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-8 text-sm">No achievements yet. Keep learning!</p>
             ) : (
               <div className="space-y-3">
                 {achievements.slice(0, 5).map((achievement) => (
-                  <div key={achievement.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div key={achievement.id} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg transition-colors">
                     <Award className="w-5 h-5 text-yellow-500 mt-1 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-sm truncate">{achievement.title}</p>
-                      <p className="text-xs text-gray-500 line-clamp-2">{achievement.description}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{achievement.description}</p>
                     </div>
                   </div>
                 ))}
