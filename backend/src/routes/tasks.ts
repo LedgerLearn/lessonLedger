@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { getWebSocketService } from '../services/websocket.service';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -36,6 +37,15 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       },
     });
 
+    // Broadcast task creation
+    const wsService = getWebSocketService();
+    if (wsService) {
+      wsService.broadcastToUser(req.userId!, {
+        type: 'task_created',
+        data: task,
+      });
+    }
+
     res.status(201).json(task);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -57,6 +67,16 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
     }
 
     const updated = await prisma.task.findUnique({ where: { id: req.params.id } });
+
+    // Broadcast task update
+    const wsService = getWebSocketService();
+    if (wsService && updated) {
+      wsService.broadcastToUser(req.userId!, {
+        type: 'task_updated',
+        data: updated,
+      });
+    }
+
     res.json(updated);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -72,6 +92,15 @@ router.delete('/:id', async (req: AuthRequest, res: Response) => {
 
     if (result.count === 0) {
       return res.status(404).json({ error: 'Task not found' });
+    }
+
+    // Broadcast task deletion
+    const wsService = getWebSocketService();
+    if (wsService) {
+      wsService.broadcastToUser(req.userId!, {
+        type: 'task_deleted',
+        data: { id: req.params.id },
+      });
     }
 
     res.json({ message: 'Task deleted' });
