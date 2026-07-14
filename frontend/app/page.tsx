@@ -15,16 +15,16 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-950 transition-colors">
       <Navbar />
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-4">
             Master Your Learning Journey
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             Organize, track, and stay accountable to your academic and career goals with structured roadmaps, task tracking, and blockchain-verified achievements.
           </p>
           {!user ? (
@@ -43,25 +43,25 @@ export default function Home() {
           <div className="card hover:shadow-md transition-shadow">
             <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-primary mb-4" />
             <h3 className="font-semibold text-base sm:text-lg mb-2">Learning Roadmaps</h3>
-            <p className="text-gray-600 text-sm">Structured, hierarchical learning paths for any skill</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Structured, hierarchical learning paths for any skill</p>
           </div>
 
           <div className="card hover:shadow-md transition-shadow">
             <Target className="w-8 h-8 sm:w-10 sm:h-10 text-secondary mb-4" />
             <h3 className="font-semibold text-base sm:text-lg mb-2">Task Tracking</h3>
-            <p className="text-gray-600 text-sm">Daily and weekly goals with progress monitoring</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Daily and weekly goals with progress monitoring</p>
           </div>
 
           <div className="card hover:shadow-md transition-shadow">
             <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-accent mb-4" />
             <h3 className="font-semibold text-base sm:text-lg mb-2">Progress Analytics</h3>
-            <p className="text-gray-600 text-sm">Streak tracking and GitHub-style contribution heatmap</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Streak tracking and GitHub-style contribution heatmap</p>
           </div>
 
           <div className="card hover:shadow-md transition-shadow">
             <Award className="w-8 h-8 sm:w-10 sm:h-10 text-success mb-4" />
             <h3 className="font-semibold text-base sm:text-lg mb-2">NFT Achievements</h3>
-            <p className="text-gray-600 text-sm">Verifiable on-chain learning credentials</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Verifiable on-chain learning credentials</p>
           </div>
         </div>
 
@@ -81,9 +81,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-gray-50 mt-20">
+      <footer className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 mt-20 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <p className="text-center text-gray-600">
+          <p className="text-center text-gray-600 dark:text-gray-400">
             Built with ❤️ for learners and educators worldwide
           </p>
         </div>
