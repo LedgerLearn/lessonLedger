@@ -60,7 +60,7 @@ model Section {
   order     Int
   createdAt DateTime @default(now())
 
-  roadmap Topic[]
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
   topics  Topic[]
 
   @@unique([roadmapId, order])

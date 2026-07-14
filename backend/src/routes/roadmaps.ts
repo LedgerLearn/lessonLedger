@@ -4,13 +4,34 @@ import { PrismaClient } from '@prisma/client';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Get all roadmaps
+// Get all roadmaps with pagination
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const roadmaps = await prisma.roadmap.findMany({
-      include: { sections: { include: { topics: { include: { subtopics: true } } } } },
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const [roadmaps, total] = await Promise.all([
+      prisma.roadmap.findMany({
+        skip,
+        take: limit,
+        include: { sections: { include: { topics: { include: { subtopics: true } } } } },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.roadmap.count(),
+    ]);
+
+    res.json({
+      roadmaps,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
     });
-    res.json(roadmaps);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

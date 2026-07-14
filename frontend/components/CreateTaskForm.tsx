@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import { Plus } from 'lucide-react';
+import { useToast } from './ToastProvider';
 
 interface CreateTaskFormProps {
   onTaskCreated?: () => void;
@@ -16,6 +17,7 @@ export default function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
   const [priority, setPriority] = useState('medium');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { addToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +33,7 @@ export default function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
 
     if (apiError) {
       setError(apiError);
+      addToast('Failed to create task', 'error');
       setLoading(false);
       return;
     }
@@ -41,8 +44,11 @@ export default function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
       setDueDate('');
       setPriority('medium');
       setIsOpen(false);
+      addToast('Task created successfully', 'success');
       onTaskCreated?.();
     }
+    
+    setLoading(false);
   };
 
   if (!isOpen) {
