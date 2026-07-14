@@ -10,6 +10,7 @@ import { api } from '@/lib/api'
 import StreakCard from '@/components/StreakCard'
 import TaskList from '@/components/TaskList'
 import { SkeletonDashboard } from '@/components/skeletons'
+import AchievementTestButton from '@/components/AchievementTestButton'
 
 const mockData = [
   { day: 'Mon', hours: 2 },
@@ -145,6 +146,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Test buttons for development */}
+      {process.env.NODE_ENV === 'development' && <AchievementTestButton />}
     </div>
   )
 }
