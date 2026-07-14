@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Mail, Lock } from 'lucide-react'
+import { Mail, Lock, AlertCircle } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import { api } from '@/lib/api'
 import { setStoredAuth } from '@/lib/auth'
+import { validateEmail } from '@/lib/validation'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -14,11 +15,62 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({})
+
+  const validateField = (field: 'email' | 'password', value: string) => {
+    const errors: { email?: string; password?: string } = {}
+
+    if (field === 'email') {
+      const emailValidation = validateEmail(value)
+      if (!emailValidation.isValid) {
+        errors.email = emailValidation.error
+      }
+    } else if (field === 'password') {
+      if (!value) {
+        errors.password = 'Password is required'
+      }
+    }
+
+    setFieldErrors(prev => ({ ...prev, ...errors }))
+    return Object.keys(errors).length === 0
+  }
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value)
+    if (touched.email) {
+      validateField('email', value)
+    }
+  }
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value)
+    if (touched.password) {
+      validateField('password', value)
+    }
+  }
+
+  const handleBlur = (field: 'email' | 'password') => {
+    setTouched(prev => ({ ...prev, [field]: true }))
+    validateField(field, field === 'email' ? email : password)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError('')
+    
+    // Mark all fields as touched
+    setTouched({ email: true, password: true })
+
+    // Validate all fields
+    const emailValid = validateField('email', email)
+    const passwordValid = validateField('password', password)
+
+    if (!emailValid || !passwordValid) {
+      return
+    }
+
+    setLoading(true)
 
     const { data, error: apiError } = await api.login(email, password)
     
@@ -70,49 +122,82 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg text-sm">
-                {error}
+              <div 
+                role="alert"
+                aria-live="assertive"
+                className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start gap-2"
+              >
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <span>{error}</span>
               </div>
             )}
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" aria-hidden="true" />
                 <input
+                  id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  onBlur={() => handleBlur('email')}
+                  aria-invalid={!!fieldErrors.email}
+                  aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                  className={`w-full px-4 pl-10 py-3 border rounded-lg focus:outline-none focus:ring-2 text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors ${
+                    fieldErrors.email 
+                      ? 'border-red-500 dark:border-red-500 focus:ring-red-500 dark:focus:ring-red-400' 
+                      : 'border-gray-300 dark:border-gray-700 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
+                  }`}
                   placeholder="you@example.com"
                   required
                 />
               </div>
+              {fieldErrors.email && (
+                <p id="email-error" role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" aria-hidden="true" />
+                  {fieldErrors.email}
+                </p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" aria-hidden="true" />
                 <input
+                  id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
+                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  aria-invalid={!!fieldErrors.password}
+                  aria-describedby={fieldErrors.password ? 'password-error' : undefined}
+                  className={`w-full px-4 pl-10 py-3 border rounded-lg focus:outline-none focus:ring-2 text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors ${
+                    fieldErrors.password 
+                      ? 'border-red-500 dark:border-red-500 focus:ring-red-500 dark:focus:ring-red-400' 
+                      : 'border-gray-300 dark:border-gray-700 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
+                  }`}
                   placeholder="••••••••"
                   required
                 />
               </div>
+              {fieldErrors.password && (
+                <p id="password-error" role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" aria-hidden="true" />
+                  {fieldErrors.password}
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 min-h-[44px]"
+              disabled={loading || !!fieldErrors.email || !!fieldErrors.password}
+              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
