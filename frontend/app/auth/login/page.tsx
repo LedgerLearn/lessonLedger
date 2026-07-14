@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Mail, Lock } from 'lucide-react'
+import { Mail, Lock, AlertCircle } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import { api } from '@/lib/api'
 import { setStoredAuth } from '@/lib/auth'
+import { validateEmail } from '@/lib/validation'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -14,11 +15,62 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({})
+
+  const validateField = (field: 'email' | 'password', value: string) => {
+    const errors: { email?: string; password?: string } = {}
+
+    if (field === 'email') {
+      const emailValidation = validateEmail(value)
+      if (!emailValidation.isValid) {
+        errors.email = emailValidation.error
+      }
+    } else if (field === 'password') {
+      if (!value) {
+        errors.password = 'Password is required'
+      }
+    }
+
+    setFieldErrors(prev => ({ ...prev, ...errors }))
+    return Object.keys(errors).length === 0
+  }
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value)
+    if (touched.email) {
+      validateField('email', value)
+    }
+  }
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value)
+    if (touched.password) {
+      validateField('password', value)
+    }
+  }
+
+  const handleBlur = (field: 'email' | 'password') => {
+    setTouched(prev => ({ ...prev, [field]: true }))
+    validateField(field, field === 'email' ? email : password)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError('')
+    
+    // Mark all fields as touched
+    setTouched({ email: true, password: true })
+
+    // Validate all fields
+    const emailValid = validateField('email', email)
+    const passwordValid = validateField('password', password)
+
+    if (!emailValid || !passwordValid) {
+      return
+    }
+
+    setLoading(true)
 
     const { data, error: apiError } = await api.login(email, password)
     
@@ -40,15 +92,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-indigo-950 flex items-center justify-center px-4 py-8 transition-colors">
       <div className="w-full max-w-md">
         <div className="card">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">Welcome Back</h1>
-          <p className="text-sm sm:text-base text-center text-gray-600 mb-6 sm:mb-8">Sign in to your account</p>
+          <p className="text-sm sm:text-base text-center text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">Sign in to your account</p>
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-4 min-h-[44px]"
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-4 min-h-[44px]"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -61,65 +113,98 @@ export default function LoginPage() {
 
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
+              <div className="w-full border-t border-gray-300 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with email</span>
+              <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or continue with email</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                {error}
+              <div 
+                role="alert"
+                aria-live="assertive"
+                className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg text-sm flex items-start gap-2"
+              >
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <span>{error}</span>
               </div>
             )}
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" aria-hidden="true" />
                 <input
+                  id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  onBlur={() => handleBlur('email')}
+                  aria-invalid={!!fieldErrors.email}
+                  aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                  className={`w-full px-4 pl-10 py-3 border rounded-lg focus:outline-none focus:ring-2 text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors ${
+                    fieldErrors.email 
+                      ? 'border-red-500 dark:border-red-500 focus:ring-red-500 dark:focus:ring-red-400' 
+                      : 'border-gray-300 dark:border-gray-700 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
+                  }`}
                   placeholder="you@example.com"
                   required
                 />
               </div>
+              {fieldErrors.email && (
+                <p id="email-error" role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" aria-hidden="true" />
+                  {fieldErrors.email}
+                </p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" aria-hidden="true" />
                 <input
+                  id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 pl-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  aria-invalid={!!fieldErrors.password}
+                  aria-describedby={fieldErrors.password ? 'password-error' : undefined}
+                  className={`w-full px-4 pl-10 py-3 border rounded-lg focus:outline-none focus:ring-2 text-base min-h-[44px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors ${
+                    fieldErrors.password 
+                      ? 'border-red-500 dark:border-red-500 focus:ring-red-500 dark:focus:ring-red-400' 
+                      : 'border-gray-300 dark:border-gray-700 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
+                  }`}
                   placeholder="••••••••"
                   required
                 />
               </div>
+              {fieldErrors.password && (
+                <p id="password-error" role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" aria-hidden="true" />
+                  {fieldErrors.password}
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 min-h-[44px]"
+              disabled={loading || !!fieldErrors.email || !!fieldErrors.password}
+              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-gray-600">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+            <p className="text-center text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
               <Link href="/auth/signup" className="text-primary font-semibold hover:underline">
                 Sign up

@@ -52,7 +52,8 @@ export const api = {
     }),
 
   // Roadmaps
-  getRoadmaps: () => apiCall('/roadmaps'),
+  getRoadmaps: (page: number = 1, limit: number = 10) => 
+    apiCall(`/roadmaps?page=${page}&limit=${limit}`),
   getRoadmap: (id: string) => apiCall(`/roadmaps/${id}`),
   createRoadmap: (data: any) =>
     apiCall('/roadmaps', {
