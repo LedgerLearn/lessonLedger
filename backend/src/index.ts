@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import http from 'http';
 import { authMiddleware } from './middleware/auth';
 import authRoutes from './routes/auth';
 import roadmapRoutes from './routes/roadmaps';
@@ -9,10 +10,12 @@ import streakRoutes from './routes/streaks';
 import achievementRoutes from './routes/achievements';
 import walletRoutes from './routes/wallet';
 import nftRoutes from './routes/nft';
+import { initWebSocketService } from './services/websocket.service';
 
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -41,6 +44,10 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-app.listen(PORT, () => {
+// Initialize WebSocket service
+initWebSocketService(server);
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`WebSocket server running on ws://localhost:${PORT}/ws`);
 });
