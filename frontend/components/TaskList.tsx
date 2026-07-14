@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useWebSocket } from '@/lib/useWebSocket';
 import { SkeletonTaskList } from './skeletons';
+import { useToast } from './ToastProvider';
 
 interface Task {
   id: string;
@@ -19,6 +20,7 @@ const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:5000/ws';
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addToast } = useToast();
 
   // Get token from localStorage
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -33,14 +35,17 @@ export default function TaskList() {
       switch (message.type) {
         case 'task_created':
           setTasks((prev) => [...prev, message.data]);
+          addToast('New task created successfully', 'success');
           break;
         case 'task_updated':
           setTasks((prev) =>
             prev.map((task) => (task.id === message.data.id ? message.data : task))
           );
+          addToast('Task updated successfully', 'info');
           break;
         case 'task_deleted':
           setTasks((prev) => prev.filter((task) => task.id !== message.data.id));
+          addToast('Task deleted successfully', 'info');
           break;
       }
     },
@@ -70,9 +75,12 @@ export default function TaskList() {
     
     const { data, error } = await api.updateTask(id, { completed: !completed });
     
-    // Revert on error
     if (error) {
+      // Revert on error
       setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, completed } : t)));
+      addToast('Failed to update task', 'error');
+    } else {
+      addToast(completed ? 'Task reopened' : 'Task completed!', 'success');
     }
   };
 
@@ -83,9 +91,14 @@ export default function TaskList() {
     
     const { error } = await api.deleteTask(id);
     
-    // Revert on error
-    if (error && taskToDelete) {
-      setTasks((prev) => [...prev, taskToDelete]);
+    if (error) {
+      // Revert on error
+      if (taskToDelete) {
+        setTasks((prev) => [...prev, taskToDelete]);
+      }
+      addToast('Failed to delete task', 'error');
+    } else {
+      addToast('Task deleted', 'info');
     }
   };
 
